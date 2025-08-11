@@ -10,6 +10,11 @@ namespace CMSNews.Model.Context
 {
     public class dbContext:DbContext
     {
+        public dbContext(DbContextOptions<dbContext> options) : base(options)
+        {
+
+        }
+
         public DbSet<tblNews> tblNews { get; set; }
         public DbSet<tblNewsGroup> tblNewsGroup { get; set; }
         public DbSet<tblUser> tblUser { get; set; }
