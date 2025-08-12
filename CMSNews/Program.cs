@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 var connectionString = builder.Configuration.GetConnectionString("cs");
-Console.WriteLine($"Connection String: '{connectionString}'");
 
 builder.Services.AddDbContext<dbContext>(options =>
 {
