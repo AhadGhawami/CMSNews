@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMSNews.Model.Models
 {
-    public class tblNewsGroup
+    public class tblNewsGroup : BaseEntity
     {
         public Guid id { get; set; }
         [Required]

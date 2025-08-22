@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace CMSNews.Model.Models
 {
-    public class tblComment
+    public class tblComment : BaseEntity
     {
         public Guid id { get; set; }
         [Required]
