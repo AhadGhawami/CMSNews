@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<div class="col-8 profile-main-div bg-main">
+
+    @RenderBody()
+
+</div>
+
+@* @await RenderSectionAsync("css", required: false)
+
+@section js {
+    @await RenderSectionAsync("Scripts", required: false)
+
+    @await RenderSectionAsync("js", required: false)
+} *@
+

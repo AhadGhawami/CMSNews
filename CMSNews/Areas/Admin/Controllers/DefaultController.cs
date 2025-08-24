@@ -2,6 +2,8 @@
 
 namespace CMSNews.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+
     public class DefaultController : Controller
     {
         public IActionResult Index()
