@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CMSNews.Model.Migrations
 {
-    [DbContext(typeof(dbContext))]
+    [DbContext(typeof(DbCMSNewsContext))]
     [Migration("20250902194116_InitialCreate")]
     partial class InitialCreate
     {

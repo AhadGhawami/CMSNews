@@ -10,7 +10,7 @@ namespace CMSNews.Repository.Repository
 {
     public class CommentRepository : GenericRepository<tblComment>, ICommentRepository
     {
-        public CommentRepository(dbContext context) : base(context)
+        public CommentRepository(DbCMSNewsContext context) : base(context)
         {
         }
     }

@@ -10,7 +10,7 @@ namespace CMSNews.Repository.Repository
 {
     public class NewsRepository : GenericRepository<tblNews>, INewsRepository
     {
-        public NewsRepository(dbContext context) : base(context)
+        public NewsRepository(DbCMSNewsContext context) : base(context)
         {
         }
     }

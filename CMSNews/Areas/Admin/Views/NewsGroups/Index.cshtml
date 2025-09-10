@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CMSNews.Model.Models.tblNewsGroup>
+﻿@model IEnumerable<CMSNews.Models.ViewModels.NewsGroupViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,11 +16,12 @@
                 @Html.DisplayNameFor(model => model.id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NewsGroupTitle)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ImageName)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NewsGroupTitle)
+            </th>
+           
             <th></th>
         </tr>
     </thead>
@@ -30,11 +31,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.id)
             </td>
+                <td>
+                    <img src="~/Image/news-group/@item.ImageName" class="img60x60" />
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NewsGroupTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageName)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

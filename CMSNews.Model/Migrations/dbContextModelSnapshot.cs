@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CMSNews.Model.Migrations
 {
-    [DbContext(typeof(dbContext))]
+    [DbContext(typeof(DbCMSNewsContext))]
     partial class dbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

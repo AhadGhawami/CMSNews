@@ -8,9 +8,13 @@ using System.Threading.Tasks;
 
 namespace CMSNews.Model.Context
 {
-    public class dbContext:DbContext
+    public class DbCMSNewsContext:DbContext
     {
-        public dbContext(DbContextOptions<dbContext> options) : base(options)
+        public DbCMSNewsContext()
+        {
+        }
+
+        public DbCMSNewsContext(DbContextOptions<DbCMSNewsContext> options) : base(options)
         {
 
         }

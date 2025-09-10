@@ -10,7 +10,7 @@ namespace CMSNews.Service.Service
 {
     public class NewsService : GenericService<tblNews>, INewsService
     {
-        public NewsService(dbContext context) : base(context)
+        public NewsService(DbCMSNewsContext context) : base(context)
         {
         }
     }

@@ -12,10 +12,10 @@ namespace CMSNews.Repository.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        dbContext db;
+        DbCMSNewsContext db;
         DbSet<T> dbSet;
         //سازنده
-        public GenericRepository(dbContext context)
+        public GenericRepository(DbCMSNewsContext context)
         {
             db = context;
             dbSet = context.Set<T>();

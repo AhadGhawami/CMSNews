@@ -11,7 +11,7 @@ namespace CMSNews.Repository.Repository
 {
     public class UserRepository : GenericRepository<tblUser>, IUserRepository
     {
-        public UserRepository(dbContext context) : base(context)
+        public UserRepository(DbCMSNewsContext context) : base(context)
         {
         }
     }

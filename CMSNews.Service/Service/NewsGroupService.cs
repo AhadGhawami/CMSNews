@@ -11,7 +11,7 @@ namespace CMSNews.Service.Service
 {
     public class NewsGroupService : GenericService<tblNewsGroup>, INewsGroupService
     {
-        public NewsGroupService(dbContext context) : base(context)
+        public NewsGroupService(DbCMSNewsContext context) : base(context)
         {
         }
     }

@@ -10,7 +10,7 @@ namespace CMSNews.Service.Service
 {
     public class CommentService : GenericService<tblComment>, ICommentService
     {
-        public CommentService(dbContext context) : base(context)
+        public CommentService(DbCMSNewsContext context) : base(context)
         {
         }
     }

@@ -10,7 +10,7 @@ namespace CMSNews.Service.Service
 {
     public class UserService : GenericService<tblUser>, IUserService
     {
-        public UserService(dbContext context) : base(context)
+        public UserService(DbCMSNewsContext context) : base(context)
         {
         }
     }

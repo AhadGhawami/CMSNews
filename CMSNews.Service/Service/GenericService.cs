@@ -11,7 +11,7 @@ namespace CMSNews.Service.Service
 {
     public class GenericService<T> : GenericRepository<T> where T : BaseEntity
     {
-        public GenericService(dbContext context) : base(context)
+        public GenericService(DbCMSNewsContext context) : base(context)
         {
         }
     }
