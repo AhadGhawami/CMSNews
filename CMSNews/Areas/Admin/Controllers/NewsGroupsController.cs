@@ -14,13 +14,14 @@ namespace CMSNews.Areas.Admin.Controllers
     [Area("Admin")]
     public class NewsGroupsController : Controller
     {
-        private DbCMSNewsContext db = new DbCMSNewsContext();
-        NewsGroupService _newsGroupService;
-        public NewsGroupsController()
+        private readonly NewsGroupService _newsGroupService;
+
+        public NewsGroupsController(NewsGroupService newsGroupService)
         {
-            _newsGroupService = new NewsGroupService(db);
+            _newsGroupService = newsGroupService;
         }
-        
+
+
 
         public IActionResult Index()
         {

@@ -18,7 +18,6 @@ namespace CMSNews.Model.Context
         {
 
         }
-
         public DbSet<tblNews> tblNews { get; set; }
         public DbSet<tblNewsGroup> tblNewsGroup { get; set; }
         public DbSet<tblUser> tblUser { get; set; }
