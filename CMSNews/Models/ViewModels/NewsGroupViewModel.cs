@@ -6,8 +6,9 @@ namespace CMSNews.Models.ViewModels
 {
     public class NewsGroupViewModel
     {
+       
         [DisplayName("کد گروه خبری")]
-        public Guid id { get; set; }
+        public Guid NewsGroupId { get; set; }
         [Required]
         [MaxLength(200)]
         [DisplayName("عنوان گروه خبری")]
@@ -15,6 +16,6 @@ namespace CMSNews.Models.ViewModels
         [MaxLength(100)]
         [DisplayName("تصویر")]
         public string ImageName { get; set; }
-        public IEnumerable<tblNews> Newses { get; set; }
+        public IEnumerable<tblNews>? Newses { get; set; }
     }
 }

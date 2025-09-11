@@ -10,7 +10,8 @@ namespace CMSNews.Model.Models
 {
     public class tblUser : BaseEntity
     {
-        public Guid id { get; set; }
+        [Key]
+        public Guid UserId { get; set; }
         [Required]
         [MaxLength(15)]
         public string MobileNumber { get; set; }

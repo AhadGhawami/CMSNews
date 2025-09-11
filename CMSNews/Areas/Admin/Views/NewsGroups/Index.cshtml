@@ -13,9 +13,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.id)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ImageName)
             </th>
             <th>
@@ -28,8 +25,8 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.id)
+            <td hidden>
+                @Html.DisplayFor(modelItem => item.NewsGroupId)
             </td>
                 <td>
                     <img src="~/Image/news-group/@item.ImageName" class="img60x60" />

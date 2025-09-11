@@ -10,7 +10,8 @@ namespace CMSNews.Model.Models
 {
     public class tblNewsGroup : BaseEntity
     {
-        public Guid id { get; set; }
+        [Key]
+        public Guid NewsGroupId { get; set; }
         [Required]
         [MaxLength(200)]
         public string NewsGroupTitle { get; set; }

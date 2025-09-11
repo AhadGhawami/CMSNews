@@ -9,7 +9,8 @@ namespace CMSNews.Model.Models
 {
     public class tblComment : BaseEntity
     {
-        public Guid id { get; set; }
+        [Key]
+        public Guid CommentId { get; set; }
         [Required]
         [MaxLength(2000)]
         public string CommentText { get; set; }

@@ -30,7 +30,7 @@ namespace CMSNews.Areas.Admin.Controllers
             //var newsGroupViewModels = MappingProfile.mapper.Map<IEnumerable<tblNewsGroup>,List<NewsGroupViewModel>>(newsGroups); 
             var newsGroupViewModels = newsGroup.Select(x => new NewsGroupViewModel
             {
-                id = x.id,
+                NewsGroupId = x.NewsGroupId,
                 NewsGroupTitle = x.NewsGroupTitle,
                 ImageName = x.ImageName
             }).ToList();
@@ -57,15 +57,23 @@ namespace CMSNews.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(tblNewsGroup newsGroup)
+        public IActionResult Create(NewsGroupViewModel newsGroupViewModel)
         {
             if (ModelState.IsValid)
             {
+                tblNewsGroup newsGroup = new tblNewsGroup
+                {
+                    NewsGroupId = Guid.NewGuid(),
+                    NewsGroupTitle = newsGroupViewModel.NewsGroupTitle,
+                    ImageName = newsGroupViewModel.ImageName
+                };
+
                 _newsGroupService.Add(newsGroup);
                 _newsGroupService.Save();
                 return RedirectToAction("Index");
             }
-            return View(newsGroup);
+            
+            return View(newsGroupViewModel);
         }
         public IActionResult Edit(Guid? id)
         {
@@ -82,15 +90,21 @@ namespace CMSNews.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(tblNewsGroup newsGroup)
+        public IActionResult Edit(NewsGroupViewModel newsGroupViewModel)
         {
             if (ModelState.IsValid)
             {
+                tblNewsGroup newsGroup = new tblNewsGroup
+                {
+                    NewsGroupId = newsGroupViewModel.NewsGroupId,
+                    NewsGroupTitle = newsGroupViewModel.NewsGroupTitle,
+                    ImageName = newsGroupViewModel.ImageName
+                };
                 _newsGroupService.Update(newsGroup);
                 _newsGroupService.Save();
                 return RedirectToAction("Index");
             }
-            return View(newsGroup);
+            return View(newsGroupViewModel);
         }
         public IActionResult Delete(Guid? id)
         {
