@@ -4,6 +4,7 @@ using CMSNews.Model.Context;
 using CMSNews.Model.Models;
 using CMSNews.Models.ViewModels;
 using CMSNews.Service.Service;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol;
@@ -57,24 +58,57 @@ namespace CMSNews.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(NewsGroupViewModel newsGroupViewModel)
+        public IActionResult Create(NewsGroupViewModel newsGroupViewModel, IFormFile imgUpload)
         {
             if (ModelState.IsValid)
             {
+                string imageName = "nophoto.png";
+
+                if (imgUpload != null && imgUpload.Length > 0)
+                {
+                    // فقط پسوندهای مجاز
+                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                    var extension = Path.GetExtension(imgUpload.FileName).ToLower();
+
+                    if (allowedExtensions.Contains(extension))
+                    {
+                        // اسم یکتا
+                        imageName = Guid.NewGuid().ToString() + extension;
+
+                        // مسیر پوشه
+                        string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Image", "news-group");
+
+                        // اگر نبود بسازه
+                        if (!Directory.Exists(folderPath))
+                        {
+                            Directory.CreateDirectory(folderPath);
+                        }
+
+                        string savePath = Path.Combine(folderPath, imageName);
+
+                        using (var stream = new FileStream(savePath, FileMode.Create))
+                        {
+                            imgUpload.CopyTo(stream);
+                        }
+                    }
+                }
+
                 tblNewsGroup newsGroup = new tblNewsGroup
                 {
                     NewsGroupId = Guid.NewGuid(),
                     NewsGroupTitle = newsGroupViewModel.NewsGroupTitle,
-                    ImageName = newsGroupViewModel.ImageName
+                    ImageName = imageName
                 };
 
                 _newsGroupService.Add(newsGroup);
                 _newsGroupService.Save();
+
                 return RedirectToAction("Index");
             }
-            
+
             return View(newsGroupViewModel);
         }
+
         public IActionResult Edit(Guid? id)
         {
             if (id == null)
@@ -86,14 +120,28 @@ namespace CMSNews.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(newsGroup);
+            // تبدیل دستی به ViewModel
+            NewsGroupViewModel newsGroupViewModel = new NewsGroupViewModel
+            {
+                NewsGroupId = newsGroup.NewsGroupId,
+                NewsGroupTitle = newsGroup.NewsGroupTitle,
+                ImageName = newsGroup.ImageName
+            };
+            return View(newsGroupViewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(NewsGroupViewModel newsGroupViewModel)
+        public IActionResult Edit(NewsGroupViewModel newsGroupViewModel, IFormFile imgUpload)
         {
             if (ModelState.IsValid)
             {
+                if(imgUpload != null)
+                {
+                    if(newsGroupViewModel.ImageName != "nophoto.png")
+                    {
+                        //System.IO.File.Delete(Server.MapPath("/images/news-group/")+newsGroupViewModel.ImageName);
+                    }
+                }
                 tblNewsGroup newsGroup = new tblNewsGroup
                 {
                     NewsGroupId = newsGroupViewModel.NewsGroupId,

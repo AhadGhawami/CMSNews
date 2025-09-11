@@ -35,7 +35,8 @@
                 @Html.DisplayFor(modelItem => item.NewsGroupTitle)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    <a asp-action="Edit" asp-controller="NewsGroup" asp-area="Admin" asp-route-id="@item.NewsGroupId">edit</a>
+                
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
