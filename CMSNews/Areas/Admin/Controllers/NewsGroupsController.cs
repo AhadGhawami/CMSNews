@@ -50,7 +50,13 @@ namespace CMSNews.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(newsGroup);
+            var newsGroupViewModel = new NewsGroupViewModel
+            {
+                NewsGroupId = newsGroup.NewsGroupId,
+                NewsGroupTitle = newsGroup.NewsGroupTitle,
+                ImageName = newsGroup.ImageName
+            };
+            return View(newsGroupViewModel);
         }
         public IActionResult Create()
         {
@@ -58,7 +64,7 @@ namespace CMSNews.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(NewsGroupViewModel newsGroupViewModel, IFormFile imgUpload)
+        public IActionResult Create(NewsGroupViewModel newsGroupViewModel, IFormFile? imgUpload)
         {
             if (ModelState.IsValid)
             {
@@ -115,65 +121,110 @@ namespace CMSNews.Areas.Admin.Controllers
             {
                 return BadRequest();
             }
-            tblNewsGroup newsGroup = _newsGroupService.GetEntity(id.Value);
+
+            var newsGroup = _newsGroupService.GetEntity(id.Value);
             if (newsGroup == null)
             {
                 return NotFound();
             }
-            // تبدیل دستی به ViewModel
-            NewsGroupViewModel newsGroupViewModel = new NewsGroupViewModel
+
+            // تبدیل به ViewModel
+            var newsGroupViewModel = new NewsGroupViewModel
             {
                 NewsGroupId = newsGroup.NewsGroupId,
                 NewsGroupTitle = newsGroup.NewsGroupTitle,
                 ImageName = newsGroup.ImageName
             };
+
             return View(newsGroupViewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(NewsGroupViewModel newsGroupViewModel, IFormFile imgUpload)
         {
-            if (ModelState.IsValid)
+            ModelState.Remove("ImageName");
+
+            if (!ModelState.IsValid)
             {
-                if(imgUpload != null)
+                return View(newsGroupViewModel);
+            }
+
+            string imageName = newsGroupViewModel.ImageName ?? "nophoto.png";
+
+            if (imgUpload != null && imgUpload.Length > 0)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(imgUpload.FileName).ToLower();
+
+                if (allowedExtensions.Contains(extension))
                 {
-                    if(newsGroupViewModel.ImageName != "nophoto.png")
+                    // ✅ حذف عکس قبلی فقط اگر nophoto نبود
+                    if (!string.IsNullOrEmpty(newsGroupViewModel.ImageName) &&
+                        newsGroupViewModel.ImageName != "nophoto.png")
                     {
-                        //System.IO.File.Delete(Server.MapPath("/images/news-group/")+newsGroupViewModel.ImageName);
+                        string oldPath = Path.Combine(Directory.GetCurrentDirectory(),
+                                                      "wwwroot", "Image", "news-group",
+                                                      newsGroupViewModel.ImageName);
+
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
+
+                    // ذخیره عکس جدید
+                    imageName = Guid.NewGuid().ToString() + extension;
+                    string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Image", "news-group");
+
+                    if (!Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                    }
+
+                    string savePath = Path.Combine(folderPath, imageName);
+
+                    using (var stream = new FileStream(savePath, FileMode.Create))
+                    {
+                        imgUpload.CopyTo(stream);
                     }
                 }
-                tblNewsGroup newsGroup = new tblNewsGroup
-                {
-                    NewsGroupId = newsGroupViewModel.NewsGroupId,
-                    NewsGroupTitle = newsGroupViewModel.NewsGroupTitle,
-                    ImageName = newsGroupViewModel.ImageName
-                };
-                _newsGroupService.Update(newsGroup);
-                _newsGroupService.Save();
-                return RedirectToAction("Index");
             }
-            return View(newsGroupViewModel);
-        }
-        public IActionResult Delete(Guid? id)
-        {
-            if (id == null)
+
+            var newsGroup = new tblNewsGroup
             {
-                return BadRequest();
-            }
-            tblNewsGroup newsGroup = _newsGroupService.GetEntity(id.Value);
-            if (newsGroup == null)
+                NewsGroupId = newsGroupViewModel.NewsGroupId,
+                NewsGroupTitle = newsGroupViewModel.NewsGroupTitle,
+                ImageName = imageName
+            };
+
+            _newsGroupService.Update(newsGroup);
+            _newsGroupService.Save();
+
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(Guid id)
+        {
+            var entity = _newsGroupService.GetEntity(id);
+            if (entity == null)
             {
                 return NotFound();
             }
-            return View(newsGroup);
-        }
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(Guid id)
-        {
-            //tblNewsGroup newsGroup = _newsGroupService.GetEntity(id);
-            _newsGroupService.Delete(id);
+
+            // حذف تصویر از سرور (به جز تصویر پیش‌فرض)
+            if (!string.IsNullOrEmpty(entity.ImageName) && entity.ImageName != "nophoto.png")
+            {
+                string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Image", "news-group", entity.ImageName);
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+            }
+
+            _newsGroupService.Delete(entity);
             _newsGroupService.Save();
+
             return RedirectToAction("Index");
         }
         protected override void Dispose(bool disposing)
