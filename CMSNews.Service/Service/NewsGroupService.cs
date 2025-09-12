@@ -11,8 +11,10 @@ namespace CMSNews.Service.Service
 {
     public class NewsGroupService : GenericService<tblNewsGroup>, INewsGroupService
     {
-        public NewsGroupService(DbCMSNewsContext context) : base(context)
+        public NewsGroupService(IGenericRepository<tblNewsGroup> repository) : base(repository)
         {
         }
+
+        // متدهای خاص NewsGroup رو اینجا اضافه کن (اگه داشتی)
     }
 }

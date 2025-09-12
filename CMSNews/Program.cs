@@ -27,7 +27,10 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 // ثبت سرویس‌های اختصاصی
-builder.Services.AddScoped<NewsGroupService>();
+builder.Services.AddScoped<INewsGroupService, NewsGroupService>();
+builder.Services.AddScoped<INewsService, NewsService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 // اگر سرویس‌های دیگه‌ای مثل NewsService یا UserService داری، اینجا اضافه کن:
 // builder.Services.AddScoped<NewsService>();
 // builder.Services.AddScoped<UserService>();

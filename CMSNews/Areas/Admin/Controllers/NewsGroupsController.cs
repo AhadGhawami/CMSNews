@@ -15,9 +15,9 @@ namespace CMSNews.Areas.Admin.Controllers
     [Area("Admin")]
     public class NewsGroupsController : Controller
     {
-        private readonly NewsGroupService _newsGroupService;
+        private readonly INewsGroupService _newsGroupService;
 
-        public NewsGroupsController(NewsGroupService newsGroupService)
+        public NewsGroupsController(INewsGroupService newsGroupService)
         {
             _newsGroupService = newsGroupService;
         }
@@ -226,10 +226,6 @@ namespace CMSNews.Areas.Admin.Controllers
             _newsGroupService.Save();
 
             return RedirectToAction("Index");
-        }
-        protected override void Dispose(bool disposing)
-        {
-            _newsGroupService.Dispose();
         }
     }
 }
