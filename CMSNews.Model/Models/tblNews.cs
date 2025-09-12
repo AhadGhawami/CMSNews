@@ -29,7 +29,7 @@ namespace CMSNews.Model.Models
         [Required]
         public int Like { get; set; }
         [Required]
-        public Guid tblNewsGroupId { get; set; }
+        public Guid NewsGroupId { get; set; }
         [Required]
         public Guid UserId { get; set; }
         public tblUser User { get; set; }

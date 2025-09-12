@@ -3,6 +3,8 @@ using CMSNews.Model.Context;
 using CMSNews.Repository.Repository;
 using CMSNews.Service.Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using CMSNews.Model.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,13 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 // builder.Services.AddScoped<NewsService>();
 // builder.Services.AddScoped<UserService>();
 
+// ثبت سرویس‌های Identity
+//builder.Services.AddIdentity<tblUser, IdentityRole<Guid>>()
+//    .AddEntityFrameworkStores<DbCMSNewsContext>()
+//    .AddDefaultTokenProviders();
+
+
+
 var app = builder.Build();
 
 // تنظیمات pipeline
@@ -46,9 +55,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 // مسیردهی برای ناحیه‌ها (Areas)
 app.MapControllerRoute(
