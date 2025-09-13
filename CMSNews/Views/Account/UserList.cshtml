@@ -1,0 +1,40 @@
+﻿@model List<CMSNews.Models.ViewModels.UserListViewModel>
+
+@{
+    ViewData["Title"] = "لیست کاربران";
+}
+
+<h2 class="text-center mb-4">لیست کاربران</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>شماره موبایل</th>
+            <th>وضعیت</th>
+            <th>تعداد اخبار</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.MobileNumber</td>
+                <td>@(user.IsActive ? "فعال" : "غیرفعال")</td>
+                <td>@user.NewsCount</td>
+                <td>
+                    <a asp-action="EditUser" asp-route-id="@user.UserId" class="btn btn-sm btn-warning">ویرایش</a>
+
+                    <form asp-action="ChangeRole" method="post" class="d-inline">
+                        <input type="hidden" name="userId" value="@user.UserId" />
+                        <select name="newRole" class="form-select form-select-sm d-inline w-auto">
+                            <option value="User">User</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-secondary">تغییر نقش</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

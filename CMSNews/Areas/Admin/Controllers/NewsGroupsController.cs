@@ -4,6 +4,7 @@ using CMSNews.Model.Context;
 using CMSNews.Model.Models;
 using CMSNews.Models.ViewModels;
 using CMSNews.Service.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,8 @@ using System.Net;
 namespace CMSNews.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+
     public class NewsGroupsController : Controller
     {
         private readonly INewsGroupService _newsGroupService;

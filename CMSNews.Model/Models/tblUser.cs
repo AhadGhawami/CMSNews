@@ -14,15 +14,23 @@ namespace CMSNews.Model.Models
         public Guid UserId { get; set; }
         [Required]
         [MaxLength(15)]
+        [Display(Name = "شماره موبایل")]
         public string MobileNumber { get; set; }
         [Required]
-        [MaxLength(100)]
+        [MaxLength(15)]
+        [DataType(DataType.Password)]
+        [Display(Name = "رمز عبور")]
         public string Password { get; set; }
         [Required]
+        [Display(Name = "تاریخ ثبت‌نام")]
         public DateTime RegisterDate { get; set; }
+
         [Required]
+        [Display(Name = "فعال / غیرفعال")]
         public bool IsActive { get; set; }
-        public IEnumerable<tblNews> Newses { get; set; }
+
+        [Display(Name = "اخبار ثبت‌شده")]
+        public ICollection<tblNews>? Newses { get; set; }
 
     }
 }

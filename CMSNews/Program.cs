@@ -3,8 +3,6 @@ using CMSNews.Model.Context;
 using CMSNews.Repository.Repository;
 using CMSNews.Service.Service;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using CMSNews.Model.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,16 +31,19 @@ builder.Services.AddScoped<INewsGroupService, NewsGroupService>();
 builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
-// اگر سرویس‌های دیگه‌ای مثل NewsService یا UserService داری، اینجا اضافه کن:
-// builder.Services.AddScoped<NewsService>();
-// builder.Services.AddScoped<UserService>();
 
-// ثبت سرویس‌های Identity
-//builder.Services.AddIdentity<tblUser, IdentityRole<Guid>>()
-//    .AddEntityFrameworkStores<DbCMSNewsContext>()
-//    .AddDefaultTokenProviders();
+// فعال‌سازی Session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
-
+// اگر قصد استفاده از Identity نداری، این بخش کامنت بمونه
+// builder.Services.AddIdentity<tblUser, IdentityRole<Guid>>()
+//     .AddEntityFrameworkStores<DbCMSNewsContext>()
+//     .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -55,10 +56,14 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
 
+app.UseRouting();
+
+// فعال‌سازی Session قبل از Authorization
+app.UseSession();
+
+// اگر از Identity استفاده نمی‌کنی، این خط کافیست
+app.UseAuthorization();
 
 // مسیردهی برای ناحیه‌ها (Areas)
 app.MapControllerRoute(

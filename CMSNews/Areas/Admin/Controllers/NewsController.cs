@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using CMSNews.Models.ViewModels;
 using CMSNews.Model.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CMSNews.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+
     public class NewsController : Controller
     {
         private readonly INewsService _newsService;
