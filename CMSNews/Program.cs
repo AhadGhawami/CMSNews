@@ -3,6 +3,7 @@ using CMSNews.Model.Context;
 using CMSNews.Repository.Repository;
 using CMSNews.Service.Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,10 +41,14 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// اگر قصد استفاده از Identity نداری، این بخش کامنت بمونه
-// builder.Services.AddIdentity<tblUser, IdentityRole<Guid>>()
-//     .AddEntityFrameworkStores<DbCMSNewsContext>()
-//     .AddDefaultTokenProviders();
+// فعال‌سازی احراز هویت با کوکی
+builder.Services.AddAuthentication("MyCookieAuth")
+    .AddCookie("MyCookieAuth", options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+    });
 
 var app = builder.Build();
 
@@ -59,10 +64,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// فعال‌سازی Session قبل از Authorization
+// فعال‌سازی Session و Authentication
 app.UseSession();
-
-// اگر از Identity استفاده نمی‌کنی، این خط کافیست
+app.UseAuthentication(); // حتماً قبل از Authorization باشه
 app.UseAuthorization();
 
 // مسیردهی برای ناحیه‌ها (Areas)

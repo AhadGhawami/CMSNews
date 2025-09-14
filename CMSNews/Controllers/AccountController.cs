@@ -3,6 +3,9 @@ using CMSNews.Model.Models;
 using CMSNews.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace CMSNews.Controllers
 {
@@ -39,8 +42,17 @@ namespace CMSNews.Controllers
                 return View(model);
             }
 
-            HttpContext.Session.SetString("UserId", user.UserId.ToString());
-            HttpContext.Session.SetString("MobileNumber", user.MobileNumber);
+            // ساخت Claims برای احراز هویت
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.MobileNumber),
+        new Claim("UserId", user.UserId.ToString())
+    };
+
+            var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync("MyCookieAuth", principal);
 
             return !string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl)
                 ? Redirect(model.ReturnUrl)
@@ -50,14 +62,15 @@ namespace CMSNews.Controllers
         // خروج از حساب
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Login", "Account");
+            await HttpContext.SignOutAsync("MyCookieAuth"); // خروج از کوکی احراز هویت
+            HttpContext.Session.Clear(); // پاک کردن اطلاعات اضافی Session (اختیاری)
+            return RedirectToAction("Index", "Home");
         }
 
+
         // نمایش فرم ثبت‌نام
-        [HttpGet]
         public IActionResult Register()
         {
             return View();
@@ -90,12 +103,20 @@ namespace CMSNews.Controllers
             _dbContext.tblUser.Add(newUser);
             await _dbContext.SaveChangesAsync();
 
-            HttpContext.Session.SetString("UserId", newUser.UserId.ToString());
-            HttpContext.Session.SetString("MobileNumber", newUser.MobileNumber);
+            // ساخت Claims برای ورود بعد از ثبت‌نام
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, newUser.MobileNumber),
+        new Claim("UserId", newUser.UserId.ToString())
+    };
+
+            var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync("MyCookieAuth", principal);
 
             return RedirectToAction("Index", "Home");
         }
-
         // لیست کاربران
         public async Task<IActionResult> UserList()
         {
@@ -166,7 +187,6 @@ namespace CMSNews.Controllers
 
             return RedirectToAction("UserList");
         }
-
         // تغییر وضعیت فعال بودن
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -18,12 +18,24 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/">خانه</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Account/Login">ورود</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Account/Register">ثبت‌نام</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="btn btn-danger">خروج</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Account/Login">ورود</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Account/Register">ثبت‌نام</a>
+                            </li>
+                        }
+                       
                         <li class="nav-item">
                             <a class="nav-link" href="/Admin/Dashboard">مدیریت</a>
                         </li>

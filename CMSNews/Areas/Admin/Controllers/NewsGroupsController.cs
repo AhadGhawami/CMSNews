@@ -14,7 +14,7 @@ using System.Net;
 namespace CMSNews.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
 
     public class NewsGroupsController : Controller
     {

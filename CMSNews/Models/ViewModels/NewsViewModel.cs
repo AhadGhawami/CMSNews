@@ -23,15 +23,15 @@ namespace CMSNews.Models.ViewModels
         [DisplayName("فعال / غیرفعال")]
         public bool IsActive { get; set; }
         [DisplayName("تعداد بازدید")]
-        public int See { get; set; }
+        public int? See { get; set; }
         [DisplayName("تعداد لایک")]
-        public int Like { get; set; }
+        public int? Like { get; set; }
         [DisplayName("گروه خبری")]
         public Guid NewsGroupId { get; set; }
         [DisplayName("کاربر ثبت‌کننده")]
         public Guid UserId { get; set; }
         public tblUser User { get; set; }
         public tblNewsGroup NewsGroup { get; set; }
-        public IEnumerable<tblComment> Comments { get; set; }
+        public IEnumerable<tblComment>? Comments { get; set; }
     }
 }

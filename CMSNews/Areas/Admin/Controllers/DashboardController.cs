@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CMSNews.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly DbCMSNewsContext _dbContext;

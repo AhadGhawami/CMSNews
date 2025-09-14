@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace CMSNews.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
 
     public class NewsController : Controller
     {
@@ -115,7 +115,8 @@ namespace CMSNews.Areas.Admin.Controllers
                     IsActive = true,
                     Like = 0,
                     See = 0,
-                    //UserId = 
+                    UserId = Guid.Parse(User.FindFirst("UserId")?.Value ?? Guid.Empty.ToString())
+
                 };
                 _newsService.Add(news);
                 _newsService.Save();
